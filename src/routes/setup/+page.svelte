@@ -13,12 +13,6 @@
         }
     };
 
-    $inspect(game.players, game.numPlayers);
-
-    const kaboom = (...args: Array<any>) => {
-        console.log("kaboom", ...args);
-    };
-
     const submitForm = (ev: SubmitEvent) => {
         ev.preventDefault();
     };
@@ -154,7 +148,6 @@
                 </label>
 
                 {#each { length: game.numPlayers }, index}
-                    {@const thing = kaboom(index, game.players)}
                     <div class="player-input mt-2">
                         <label class="label">
                             <span class="label-text"
@@ -167,7 +160,7 @@
                                 placeholder="Enter player name"
                             />
                         </label>
-                        <p>{thing}</p>
+
                         <label class="label mt-3">
                             <span class="label-text"
                                 >Player {index + 1} Colour</span

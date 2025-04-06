@@ -84,6 +84,11 @@ class Game {
     settings: GameSettings = $state(new GameSettings());
     numPlayers = $derived(this.players.length);
     currentPlayer = $derived(this.players[this.currentPlayerIndex]);
+    availableColors = $derived(
+        playerBackgroundColors.filter((color) => {
+            this.players.some((player) => player.color.color === color.color);
+        })
+    );
 
     constructor(players: Array<Player>, settings: GameSettings) {
         this.players = players;
@@ -93,6 +98,7 @@ class Game {
 
     addPlayer(name: string) {
         const newPlayer = new Player(this.players.length + 1, name);
+        newPlayer.color = this.availableColors[0];
         this.players.push(newPlayer);
         return newPlayer;
     }

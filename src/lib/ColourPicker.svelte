@@ -14,9 +14,6 @@
 
     function selectColor(color: Color, isRestricted: boolean) {
         if (isRestricted) {
-            alert(
-                "This color is already selected by another player and cannot be selected."
-            );
             return;
         }
         players[thisPlayer].color = color;
@@ -65,6 +62,8 @@
         width: 25px;
         height: 25px;
         margin: 5px;
+
+        border-radius: 50%;
     }
 
     .colorSample {
@@ -95,5 +94,11 @@
     .sample.selected {
         border: 1px solid white;
         box-shadow: 0 0 5px black;
+    }
+
+    .sample.restricted {
+        border: 1px solid red;
+        box-shadow: 0 0 5px red;
+        cursor: not-allowed;
     }
 </style>
