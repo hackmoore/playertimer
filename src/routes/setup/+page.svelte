@@ -1,13 +1,19 @@
 <script lang="ts">
-    import { Game, GameSettings, Player } from '$lib/types';
     import ColourPicker from '$lib/ColourPicker.svelte';
     import { playerBackgroundColors } from '$lib/const';
+    import type { GameSettings, Player } from '$lib/types';
 
-    const settings: GameSettings = new GameSettings();
-    let players: Array<Player> = [
-        new Player(1, "Player 1"),
-        new Player(2, "Player 2"),   
-    ];
+    const settings: GameSettings = {
+        timerMode: "countdown",
+        turnTimeLimit: 120,
+        timeTurnIncrement: 0,
+        forceOrder: true,
+        allowPause: true,
+        showTotalTime: true,
+        showTurnTime: true,
+        showTurnTimeLeft: true
+    };
+    let players: Array<Player> = [];
     let numPlayers: number = 2;
 /*
     timerMode: "countdown" | "countup";
@@ -25,6 +31,30 @@
     showTurnTime: boolean;
     showTurnTimeLeft: boolean;
 */
+
+    // Function to get the next available color
+    function getRandomColor() {
+        const availableColors = playerBackgroundColors.filter(color => !players.some(player => player.color.color === color.color));
+        if (availableColors.length === 0) {
+            return null; // No more available colors
+        }
+        return availableColors[0];
+    }
+
+    $: {
+        if (players.length < numPlayers) {
+            for (let i = players.length; i < numPlayers; i++) {
+                const c = getRandomColor();
+                if (!c) {
+                    console.warn("No more available colors");
+                    break; // No more available colors
+                }
+                players.push({id: i, name: `Player ${i + 1}`, color: c, seconds: 0 });
+            }
+        } else if (players.length > numPlayers) {
+            players = players.slice(0, numPlayers);
+        }
+    }
 
     function submitForm() {
 
@@ -107,7 +137,7 @@
 
                             <label class="label mt-3">
                                 <span class="label-text">Player {index + 1} Colour</span>
-                                <ColourPicker size="sm" palette={playerBackgroundColors} bind:players={players} thisPlayer={index} on:colorSelect={(e) => players[index].color = e.detail} />
+                                <ColourPicker size="sm" palette={playerBackgroundColors} players={players} thisPlayer={index} on:colorSelect={(e) => players[index].color = e.detail} />
                             </label>
                         </div>
                     {/each}

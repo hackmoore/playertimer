@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Color, Player } from "./types";
+    import type { Color, Player } from "./types";
 
     export let palette: Array<Color>;
     export let players: Array<Player>;          // Bind
@@ -9,13 +9,13 @@
 
     function selectColor(color: Color, isRestricted: boolean) {
         if (isRestricted) {
-            alert("This color is already selected by another player and cannot be selected.");
             return;
         }
         players[thisPlayer].color = color;
         onColorSelect(color);
     }
 
+    $: players = players;
     
 </script>
 
