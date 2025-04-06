@@ -51,6 +51,8 @@
         width: 25px;
         height: 25px;
         margin: 5px;
+
+        border-radius: 50%;
     }
 
     .colorSample {
@@ -81,6 +83,12 @@
     .sample.selected {
         border: 1px solid white;
         box-shadow: 0 0 5px black;
+    }
+
+    .sample.restricted {
+        border: 1px solid red;
+        box-shadow: 0 0 5px red;
+        cursor: not-allowed;
     }
     
 </style>
