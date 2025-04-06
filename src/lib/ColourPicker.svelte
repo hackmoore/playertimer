@@ -1,33 +1,44 @@
 <script lang="ts">
-    import type { Color, Player } from "./types";
+    import { Color, Player } from "./types.svelte";
 
-    export let palette: Array<Color>;
-    export let players: Array<Player>;          // Bind
-    export let thisPlayer: number;
-    export let onColorSelect: (color: Color) => void = () => {};
-    export let size: "sm"|"lg" = "lg";
+    type Props = {
+        palette: Array<Color>;
+        players: Array<Player>;
+        thisPlayer: number;
+        size: "sm" | "lg";
+    };
+
+    let { palette, players = $bindable(), thisPlayer, size }: Props = $props();
+
+    $inspect(players);
 
     function selectColor(color: Color, isRestricted: boolean) {
         if (isRestricted) {
             return;
         }
         players[thisPlayer].color = color;
-        onColorSelect(color);
     }
-
-    $: players = players;
-    
 </script>
 
 <div class="colorPicker {size}">
-    {#each palette as color}
-    {@const isRestricted = players.some(player => player.color.color === color.color && player.id !== players[thisPlayer].id)}
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <div class="colorSample" onclick={() => selectColor(color, isRestricted)}>
-            <div class="sample {players[thisPlayer].color.color==color.color?'selected':''} {isRestricted?'restricted':''}" style="background-color: {color.color};"></div>
+    {#each palette as color (color.color)}
+        {@const isRestricted = players.some(
+            (player) =>
+                player.color.color === color.color &&
+                player.id !== players[thisPlayer].id
+        )}
+        <button
+            class="colorSample"
+            onclick={() => selectColor(color, isRestricted)}
+        >
+            <div
+                class="sample {players[thisPlayer].color.color == color.color
+                    ? 'selected'
+                    : ''} {isRestricted ? 'restricted' : ''}"
+                style="background-color: {color.color};"
+            ></div>
             <p class="colorName">{color.name}</p>
-        </div>
+        </button>
     {/each}
 </div>
 
@@ -90,5 +101,4 @@
         box-shadow: 0 0 5px red;
         cursor: not-allowed;
     }
-    
 </style>
