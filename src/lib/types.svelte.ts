@@ -10,6 +10,15 @@ export class Color {
     }
 }
 
+function nextFreeColor() {
+    for( const c of playerBackgroundColors ) {
+        if( !game.players.some( p => p.color == c ) ) {
+            return c;
+        }
+    }
+    return null;
+};
+
 export class Player {
     id: number = $state(0);
     name: string = $state("");
@@ -20,19 +29,19 @@ export class Player {
         id: number,
         name: string,
         seconds: number = 0,
-        colour: Color | null = null
+        color: Color | null = null
     ) {
         this.id = id;
         this.name = name;
         this.seconds = seconds;
-        if (colour == null) {
-            const tmpColorArray =
-                playerBackgroundColors[
-                    Math.floor(Math.random() * playerBackgroundColors.length)
-                ];
-            this.color = new Color(tmpColorArray.color, tmpColorArray.name);
+        if (color == null) {
+            const c = nextFreeColor();
+            if (c == null) {
+                throw new Error("No free colors available");
+            }
+            this.color = c;
         } else {
-            this.color = colour;
+            this.color = color;
         }
     }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { game, Player } from "$lib/types.svelte";
-    import ColourPicker from "$lib/ColourPicker.svelte";
+    import ColorPicker from "$lib/ColorPicker.svelte";
     import { playerBackgroundColors } from "$lib/const";
 
     const changeNumPlayers = (newPlayerCount: number) => {
@@ -163,19 +163,19 @@
 
                         <label class="label mt-3">
                             <span class="label-text"
-                                >Player {index + 1} Colour</span
+                                >Player {index + 1} Color</span
                             >
-                            <ColourPicker
+                            <ColorPicker
                                 size="sm"
                                 palette={playerBackgroundColors}
-                                bind:players={game.players}
+                                players={game.players}
                                 thisPlayer={index}
                             />
                         </label>
                     </div>
                 {/each}
 
-                <button type="submit">Save Settings</button>
+                <button type="submit" class="btn">Save Settings</button>
             </form>
         </main>
         <aside class="w-32"></aside>
